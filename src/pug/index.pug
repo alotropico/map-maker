@@ -1,0 +1,19 @@
+include ./mixins/_picture.pug
+
+doctype html
+html(lang="en")
+	head
+		meta(charset="UTF-8")
+		meta(name="viewport", content="width=device-width, initial-scale=1.0")
+	body
+		#app.app
+			aside.tools-wrapper
+				form#tools.tools.vertical
+					h1 Map Generator
+					
+			.canvas
+				main.map
+					svg(data-map, width="960", height="484")
+
+				aside.panels-wrapper
+					form#panels.panels.horizontal

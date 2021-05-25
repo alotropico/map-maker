@@ -1,0 +1,35 @@
+svg {
+    width: auto;
+    height: 100%;
+    max-height: 80vh;
+}
+
+.group- {
+        
+    &sphere path {
+        fill: #80c2ec;
+    }
+
+    &land path {
+        stroke: none;
+        fill: black;
+    }
+
+    &countries path {
+        fill: #f5e7bb;
+        stroke: #222;
+        stroke-opacity: .5;
+        stroke-width: .3px;
+
+        &:hover path {
+            fill-opacity: 0;
+        }
+    }
+
+    &graticule path {
+        fill: none;
+        stroke: rgba(white, .5);
+        stroke-width: .4px;
+    }
+    
+}

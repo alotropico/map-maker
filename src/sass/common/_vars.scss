@@ -1,0 +1,74 @@
+// colors
+
+:root {
+  --font-size: 16px;
+  --text: #444;
+  --background: white;
+  --shadow: #fcfcfc;
+  --shadow-1: #efefef;
+  --shadow-intensity: 0.05;
+}
+
+@mixin dark-mode {
+  --text: #fff;
+  --background: #333;
+  --shadow: #222;
+  --shadow-1: #444;
+  --shadow-intensity: .1;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    @include dark-mode;
+  }
+}
+
+body.dark-mode {
+  @include dark-mode;
+}
+
+$text: var(--text);
+$background: var(--background);
+$shadow: var(--shadow);
+$shadow-1: var(--shadow-1);
+
+// typography
+
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;900&display=swap');
+
+$font-family: 'Source Sans Pro', sans-serif;
+
+$font-size: var(--font-size);
+
+
+// media queries
+
+$big-mobile-width: 580px;
+$tablet-width: 768px;
+$desktop-width: 1024px;
+
+@mixin small {
+	@media (max-width: 350px) {
+	  @content;
+	}
+}
+@mixin mobile {
+	@media (max-width: #{$big-mobile-width - 1}) {
+	  @content;
+	}
+}
+@mixin big-mobile {
+  @media (min-width: #{$big-mobile-width}) {
+    @content;
+  }
+}
+@mixin tablet {
+  @media (min-width: #{$tablet-width}) {
+    @content;
+  }
+}
+@mixin desktop {
+  @media (min-width: #{$desktop-width}) {
+    @content;
+  }
+}
