@@ -1,3 +1,74 @@
+const layers = [
+    {
+        id: 'mask',
+        label: '',
+        default: true,
+        hideInput: true,
+
+        interactive: false
+    },
+    {
+        id: 'sphere',
+        label: 'Background',
+        default: true,
+        // attrs: {disabled: 'disabled'},
+
+        interactive: false
+    },
+    {
+        id: 'graticule',
+        label: 'Show Graticule (Grid)',
+        default: true,
+
+        interactive: false
+    },
+    {
+        id: 'land',
+        label: 'Land',
+        default: true,
+
+        interactive: false
+    },
+    {
+        id: 'languagefamilies',
+        label: 'Language families',
+        default: false,
+
+        interactive: true
+    },
+    {
+        id: 'countries',
+        label: 'Countries',
+        default: true,
+
+        interactive: true
+    },
+    {
+        id: 'tinycountries',
+        label: 'Tiny countries',
+        default: false,
+
+        interactive: true
+    },
+    {
+        id: 'cities',
+        label: 'Major Cities',
+        default: false,
+
+        interactive: true
+    },
+    {
+        id: 'labels',
+        label: 'Show labels',
+        default: true,
+
+        interactive: false
+    }
+]
+
+const defaultDatalistValues = Array(10).fill(40)
+    .map((c, i) => { return {value: -180 + i * c} })
+
 const tools = [
     {
         type: 'fieldset',
@@ -6,42 +77,108 @@ const tools = [
                 label: 'Projection',
                 id: 'projection',
                 type: 'dropdown',
-                default: 'geoInterruptedHomolosine',
+                default: 'geoNaturalEarth1',
                 values: [
-                    {
-                        label: 'Natural Earth',
-                        value: 'geoNaturalEarth1',
-                        library: 'd3'
-                    },
 
+                    // Natural - subjective
+                    {label: 'Natural Earth', value: 'geoNaturalEarth1'},
                     {label: 'NaturalEarth2', value: 'geoNaturalEarth2'},
+                    {label: 'Equal Earth', value: 'geoEqualEarth', type: 'equal-area pseudocylindrical'},
+                    {label: 'Robinson', value: 'geoRobinson'},
+                    {label: 'Winkel3', value: 'geoWinkel3'},
+                    {label: 'Aitoff', value: 'geoAitoff'},
+                    {label: 'Hammer', value: 'geoHammer', type: 'equal-area'},
 
-                    {
-                        label: 'Equirectangular',
-                        value: 'geoEquirectangular',
-                        library: 'd3'
-                    },
-                    {
-                        label: 'Equal Earth',
-                        value: 'geoEqualEarth',
-                        library: 'd3'
-                    },
-                    {
-                        label: 'Orthographic',
-                        value: 'geoOrthographic',
-                        library: 'd3'
-                    },
-                    {
-                        label: 'Mercator',
-                        value: 'geoMercator',
-                        library: 'd3'
-                    },
+                    {label: 'Hufnagel', value: 'geoHufnagel', url: 'https://observablehq.com/@fil/hufnagel-projection'},
+                    {label: 'Hyperelliptical', value: 'geoHyperelliptical'},
+                    {label: 'Kavrayskiy7', value: 'geoKavrayskiy7'},
+                    {label: 'Times', value: 'geoTimes'},
+                    {label: 'Bromley', value: 'geoBromley'},
 
+                    {label: 'Eckert1', value: 'geoEckert1'},
+                    {label: 'Eckert2', value: 'geoEckert2'},
+                    {label: 'Eckert3', value: 'geoEckert3'},
+                    {label: 'Eckert4', value: 'geoEckert4'},
+                    {label: 'Eckert5', value: 'geoEckert5'},
+                    {label: 'Eckert6', value: 'geoEckert6'},
+
+                    {label: 'MtFlatPolarSinusoidal', value: 'geoMtFlatPolarSinusoidal'},
+                    {label: 'Sinusoidal', value: 'geoSinusoidal'},
+                    {label: 'FoucautSinusoidal', value: 'geoFoucautSinusoidal', type: 'pseudocylindrical'},
+
+                    {label: 'Craster', value: 'geoCraster'},
+
+
+                    // Azimuthal
+                    {label: 'Orthographic', value: 'geoOrthographic'},
+                    {label: 'Satellite', value: 'geoSatellite'},
+                    {label: 'Gilbert', value: 'geoGilbert'}, // ???
+
+                    {label: 'azimuthalEqualArea', value: 'geoAzimuthalEqualArea'},
+                    {label: 'azimuthalEquidistant', value: 'geoAzimuthalEquidistant'},
+                    {label: 'HammerRetroazimuthal', value: 'geoHammerRetroazimuthal'},
+                    {label: 'gnomonic', value: 'geoGnomonic'},
+                    {label: 'stereographic', value: 'geoStereographic'},
                     {label: 'Airy', value: 'geoAiry'},
 
-                    {label: 'Aitoff', value: 'geoAitoff'},
+                    {label: 'Wiechel', value: 'geoWiechel', type: 'equal-area'},
 
-                    {label: 'August', value: 'geoAugust'},
+                    // Cylindrical
+                    {label: 'Equirectangular', value: 'geoEquirectangular'},
+                    {label: 'Miller', value: 'geoMiller'},
+                    {label: 'Lambert cylindrical equal-area', value: 'geoCylindricalEqualArea'},
+                    {label: 'CylindricalStereographic', value: 'geoCylindricalStereographic'},
+                    {label: 'Patterson', value: 'geoPatterson'},
+                    {label: 'Mercator',  value: 'geoMercator'},
+                    {label: 'transverseMercator', value: 'geoTransverseMercator'},
+
+                    // Conic
+                    // {label: 'conicConformal', value: 'geoConicConformal'},
+                    {label: 'conicEquidistant', value: 'geoConicEquidistant'},
+                    {label: 'Polyconic', value: 'geoPolyconic'},
+                    {label: 'RectangularPolyconic', value: 'geoRectangularPolyconic'},
+                    
+                    
+                    // Interrupted
+                    {label: 'InterruptedBoggs', value: 'geoInterruptedBoggs'},
+                    {label: 'InterruptedHomolosine', value: 'geoInterruptedHomolosine'},
+                    {label: 'InterruptedMollweide', value: 'geoInterruptedMollweide'},
+                    {label: 'InterruptedMollweideHemispheres', value: 'geoInterruptedMollweideHemispheres'},
+                    {label: 'InterruptedQuarticAuthalic', value: 'geoInterruptedQuarticAuthalic'},
+                    {label: 'InterruptedSinuMollweide', value: 'geoInterruptedSinuMollweide'},
+                    {label: 'InterruptedSinusoidal', value: 'geoInterruptedSinusoidal'},
+
+                    // Poly
+                    {label: 'PolyhedralButterfly', value: 'geoPolyhedralButterfly'},
+                    {label: 'PolyhedralCollignon', value: 'geoPolyhedralCollignon'},
+                    {label: 'PolyhedralWaterman', value: 'geoPolyhedralWaterman'},
+
+                    // Conventional Projections (the Denoyer Semi-Elliptical)
+                    {label: 'Savard Egg (Fahey)', value: 'geoFahey'},
+                    {label: 'Ginzburg4', value: 'geoGinzburg4'},
+                    {label: 'Ginzburg5', value: 'geoGinzburg5'},
+                    {label: 'Ginzburg6', value: 'geoGinzburg6'},
+                    {label: 'Ginzburg8', value: 'geoGinzburg8'},
+                    {label: 'Ginzburg9', value: 'geoGinzburg9'},
+
+                    {label: 'VanDerGrinten', value: 'geoVanDerGrinten'},
+                    {label: 'VanDerGrinten2', value: 'geoVanDerGrinten2'},
+                    {label: 'VanDerGrinten3', value: 'geoVanDerGrinten3'},
+                    {label: 'VanDerGrinten4', value: 'geoVanDerGrinten4'},
+
+                    {label: 'Wagner', value: 'geoWagner'},
+                    {label: 'Wagner4', value: 'geoWagner4'},
+                    {label: 'Wagner6', value: 'geoWagner6'},
+                    {label: 'Wagner7', value: 'geoWagner7'},
+                    
+                    // Conformal
+                    {label: 'August', value: 'geoAugust', url: 'http://www.quadibloc.com/maps/mcf0702.htm'},
+                    {label: 'Eisenlohr', value: 'geoEisenlohr'},
+                    {label: 'Guyou', value: 'geoGuyou'},
+                    {label: 'PeirceQuincuncial', value: 'geoPeirceQuincuncial'},
+
+
+
 
                     {label: 'Baker', value: 'geoBaker'},
 
@@ -51,75 +188,11 @@ const tools = [
 
                     {label: 'Bottomley', value: 'geoBottomley'},
 
-                    {label: 'Bromley', value: 'geoBromley'},
-
-                    {label: 'Craster', value: 'geoCraster'},
-
-                    {label: 'CylindricalEqualArea', value: 'geoCylindricalEqualArea'},
-
-                    {label: 'CylindricalStereographic', value: 'geoCylindricalStereographic'},
-
-                    {label: 'Eckert1', value: 'geoEckert1'},
-
-                    {label: 'Eckert2', value: 'geoEckert2'},
-
-                    {label: 'Eckert3', value: 'geoEckert3'},
-
-                    {label: 'Eckert4', value: 'geoEckert4'},
-
-                    {label: 'Eckert5', value: 'geoEckert5'},
-
-                    {label: 'Eckert6', value: 'geoEckert6'},
-
-                    {label: 'Eisenlohr', value: 'geoEisenlohr'},
-
-                    {label: 'Fahey', value: 'geoFahey'},
-
-                    {label: 'FoucautSinusoidal', value: 'geoFoucautSinusoidal'},
-
-                    {label: 'Gilbert', value: 'geoGilbert'},
-
-                    {label: 'Ginzburg4', value: 'geoGinzburg4'},
-
-                    {label: 'Ginzburg5', value: 'geoGinzburg5'},
-
-                    {label: 'Ginzburg6', value: 'geoGinzburg6'},
-
-                    {label: 'Ginzburg8', value: 'geoGinzburg8'},
-
-                    {label: 'Ginzburg9', value: 'geoGinzburg9'},
-
-                    {label: 'Guyou', value: 'geoGuyou'},
-
-                    {label: 'Hammer', value: 'geoHammer'},
-
-                    {label: 'HammerRetroazimuthal', value: 'geoHammerRetroazimuthal'},
-
                     {label: 'Healpix', value: 'geoHealpix'},
 
                     {label: 'Hill', value: 'geoHill'},
 
                     {label: 'Homolosine', value: 'geoHomolosine'},
-
-                    {label: 'Hufnagel', value: 'geoHufnagel'},
-
-                    {label: 'Hyperelliptical', value: 'geoHyperelliptical'},
-                    
-                    {label: 'InterruptedBoggs', value: 'geoInterruptedBoggs'},
-
-                    {label: 'InterruptedHomolosine', value: 'geoInterruptedHomolosine'},
-
-                    {label: 'InterruptedMollweide', value: 'geoInterruptedMollweide'},
-
-                    {label: 'InterruptedMollweideHemispheres', value: 'geoInterruptedMollweideHemispheres'},
-
-                    {label: 'InterruptedQuarticAuthalic', value: 'geoInterruptedQuarticAuthalic'},
-
-                    {label: 'InterruptedSinuMollweide', value: 'geoInterruptedSinuMollweide'},
-
-                    {label: 'InterruptedSinusoidal', value: 'geoInterruptedSinusoidal'},
-
-                    {label: 'Kavrayskiy7', value: 'geoKavrayskiy7'},
 
                     {label: 'Lagrange', value: 'geoLagrange'},
 
@@ -129,114 +202,90 @@ const tools = [
 
                     {label: 'Loximuthal', value: 'geoLoximuthal'},
 
-                    {label: 'Miller', value: 'geoMiller'},
-
                     {label: 'Mollweide', value: 'geoMollweide'},
 
                     {label: 'MtFlatPolarParabolic', value: 'geoMtFlatPolarParabolic'},
 
                     {label: 'MtFlatPolarQuartic', value: 'geoMtFlatPolarQuartic'},
 
-                    {label: 'MtFlatPolarSinusoidal', value: 'geoMtFlatPolarSinusoidal'},
-
                     {label: 'NellHammer', value: 'geoNellHammer'},
 
                     {label: 'Nicolosi', value: 'geoNicolosi'},
 
-                    {label: 'Patterson', value: 'geoPatterson'},
-
-                    {label: 'PeirceQuincuncial', value: 'geoPeirceQuincuncial'},
-                    {label: 'Polyconic', value: 'geoPolyconic'},
-                    
-                    {label: 'PolyhedralButterfly', value: 'geoPolyhedralButterfly'},
-
-                    {label: 'PolyhedralCollignon', value: 'geoPolyhedralCollignon'},
-
-                    {label: 'PolyhedralWaterman', value: 'geoPolyhedralWaterman'},
-                    
-                    {label: 'RectangularPolyconic', value: 'geoRectangularPolyconic'},
-
-                    {label: 'Robinson', value: 'geoRobinson'},
-
-                    {label: 'Satellite', value: 'geoSatellite'},
-
                     {label: 'SinuMollweide', value: 'geoSinuMollweide'},
-
-                    {label: 'Sinusoidal', value: 'geoSinusoidal'},
                     
-                    {label: 'Times', value: 'geoTimes'},
-
-                    {label: 'VanDerGrinten', value: 'geoVanDerGrinten'},
-
-                    {label: 'VanDerGrinten2', value: 'geoVanDerGrinten2'},
-
-                    {label: 'VanDerGrinten3', value: 'geoVanDerGrinten3'},
-
-                    {label: 'VanDerGrinten4', value: 'geoVanDerGrinten4'},
-
-                    {label: 'Wagner', value: 'geoWagner'},
-
-                    {label: 'Wagner4', value: 'geoWagner4'},
-
-                    {label: 'Wagner6', value: 'geoWagner6'},
-
-                    {label: 'Wagner7', value: 'geoWagner7'},
-
-                    {label: 'Wiechel', value: 'geoWiechel'},
-
-                    {label: 'Winkel3', value: 'geoWinkel3'},
+                    
+                    
                 ]
             },
+            {
+                label: 'Lateral Rotation [λ]',
+                id: 'rotation',
+                type: 'range',
+                default: 0,
+                attrs: {
+                    min: -180,
+                    max: 180,
+                    step: 5,
+                    list: 'rotation-ticks'
+                }
+            },
+            {
+                label: '',
+                id: 'rotation-ticks',
+                type: 'datalist',
+                values: defaultDatalistValues
+            },
+            {
+                label: 'Vertical Rotation [φ]',
+                id: 'translation',
+                type: 'range',
+                default: 0,
+                attrs: {
+                    min: -180,
+                    max: 180,
+                    step: 5,
+                    list: 'translation-ticks'
+                }
+            },
+            {
+                label: '',
+                id: 'translation-ticks',
+                type: 'datalist',
+                values: defaultDatalistValues
+            },
+            {
+                label: 'Clock Rotation [γ]',
+                id: 'tilt',
+                type: 'range',
+                default: 0,
+                attrs: {
+                    min: -180,
+                    max: 180,
+                    step: 5,
+                    list: 'tilt-ticks'
+                }
+            },
+            {
+                label: '',
+                id: 'tilt-ticks',
+                type: 'datalist',
+                values: defaultDatalistValues
+            }
         ]
     },
     {
         label: 'Features',
         type: 'fieldset',
-        fields: [
-            {
-                label: 'Show Labels',
-                id: 'labels',
+        fields: layers.filter(l => !l.hideInput).reverse().map(l => {
+            return {
+                label: l.label,
+                id: l.id,
                 type: 'checkbox',
-                default: false
-            },
-            {
-                label: 'Show Grid',
-                id: 'graticule',
-                type: 'checkbox',
-                default: true
-            },
-            {
-                label: 'Countries',
-                id: 'countries',
-                type: 'checkbox',
-                default: true
-            },
-            {
-                label: 'Micro States',
-                id: 'micro_states',
-                type: 'checkbox',
-                default: false
-            },
-            {
-                label: 'Lakes & Rivers',
-                id: 'fresh_water_bodies',
-                type: 'checkbox',
-                default: false
-            },
-            {
-                label: 'Major Cities',
-                id: 'cities',
-                type: 'checkbox',
-                default: false
-            },
-            {
-                label: 'Background',
-                id: 'sphere',
-                type: 'checkbox',
-                default: true,
-                attrs: {disabled: 'disabled'}
-            },
-        ]
+                default: l.default,
+                attrs: l?.attrs ? l.attrs : false
+            }
+        })
     },
     {
         label: 'Colors',
@@ -244,93 +293,49 @@ const tools = [
         fields: [
             {
                 label: 'Seas',
-                id: 'seas',
+                id: 'color-seas',
                 type: 'color',
-                default: '#6CB6E4',
+                default: '#6da9ce',
                 css: 'fill',
-                identifiers: [`.group-sphere path`]
+                identifiers: ['.group-sphere path']
             },
             {
                 label: 'Land',
-                id: 'land',
+                id: 'color-land',
                 type: 'color',
                 default: '#F7E6B1',
                 css: 'fill',
-                identifiers: [`.group-land path`, `.group-countries path`]
+                identifiers: ['.group-land path'/* , '.group-countries path' */]
             },
             {
                 label: 'Countrie\'s borders',
-                id: 'lines',
+                id: 'color-lines',
                 type: 'color',
-                default: '#999999',
+                default: '#333333',
                 css: 'stroke',
-                identifiers: [`.group-countries path`]
+                identifiers: ['.group-countries path']
             },
             {
-                label: 'Lines',
-                id: 'lines',
+                label: 'Graticule lines',
+                id: 'color-graticule',
                 type: 'color',
                 default: '#ffffff',
                 css: 'stroke',
-                identifiers: [`.group-graticule path`]
+                identifiers: ['.group-graticule path']
             },
             {
                 label: 'Texts',
-                id: 'texts',
+                id: 'color-texts',
                 type: 'color',
                 default: '#333333',
                 css: 'color',
-                identifiers: [`.group-labels path`]
+                identifiers: ['.group-labels path']
             }
         ]
     }
 ]
 
 const panels = [
-    {
-        type: 'fieldset',
-        fields: [
-            {
-                label: 'Earth\'s Rotation',
-                id: 'rotation',
-                type: 'range',
-                default: 0,
-                attrs: {
-                    min: 0,
-                    max: 359,
-                    step: 2
-                }
-            },
-            {
-                label: 'Earth\'s Tilt',
-                id: 'translation',
-                type: 'range',
-                default: 0,
-                attrs: {
-                    min: 0,
-                    max: 359,
-                    step: 2
-                }
-            },
-        ]
-    },
-    {
-        type: 'fieldset',
-        attrs: {class: 'break'},
-        fields: [
-            {
-                label: 'Save in this computer',
-                id: 'save_local',
-                type: 'checkbox',
-                default: true
-            },
-            {
-                label: 'Save Configuration',
-                id: 'save_config',
-                type: 'button'
-            }
-        ]
-    },
     {
         type: 'fieldset',
         fields: [
@@ -348,4 +353,4 @@ const panels = [
     }
 ]
 
-export {tools, panels}
+export {layers, tools, panels}

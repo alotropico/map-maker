@@ -1,6 +1,9 @@
 import * as d3 from 'd3'
-import * as topojson from 'topojson'
 import * as d3g from 'd3-geo-projection'
+
+import {layers} from './config.js'
+
+Object.assign(d3, d3g)
 
 let svg,
     inited = false,
@@ -8,18 +11,7 @@ let svg,
     graticule,
     styles,
 
-    el = {},
-    elKeys = [
-        'mask',
-        'sphere',
-        'graticule',
-        'land',
-        'countries',
-        'fresh_water_bodies',
-        'micro_states',
-        'cities',
-        'labels',
-    ]
+    domElements = {}
 
 function createMap() {
 
@@ -27,86 +19,70 @@ function createMap() {
 
     svg = d3.select('[data-map]')
 
-    svg.attr("viewBox", `0 0 960 484`)
+    svg.attr('viewBox', '0 0 960 484')
 
     styles = svg.append('style')
 
-    el['mask'] = svg.append("clipPath")
-        .attr("id", "mask")
+    domElements['mask'] = svg.append('clipPath')
+        .attr('id', 'mask')
 
-    elKeys.forEach(c => {
-        if(c != 'mask'){
-            el[c] = svg.append("g")
-            .attr("class", 'group-' + c)
-            .attr("clip-path", "url(#mask)")
+    layers.forEach(layer => {
+        if(layer.id != 'mask'){
+            domElements[layer.id] = svg.append('g')
+            .attr('class', 'group-' + layer.id)
+            .attr('clip-path', 'url(#mask)')
         }
     })
     
     path = d3.geoPath()
-
     graticule = d3.geoGraticule10()
 }
 
-function update(world, config) {
+let projection
 
-    let proyectionType
+function update(world, options) {
 
-    if(config?.projectionLibrary && config.projectionLibrary == 'd3') {
-        proyectionType = d3[config.projection]()
-    } else {
-        proyectionType = d3g[config.projection]()
-    }
-
-    const projection = proyectionType
-            .center([0, 0])
-            .rotate([360 - config.rotation, 360 - config.translation])
-            .fitExtent([[0, 0], [960, 484]], {type: "Sphere"})
+    projection = d3[options.projection]()
+        .center([0, 0])
+        .rotate([360 - options.rotation, 360 - options.translation, 360 - options.tilt])
+        .fitExtent([[0, 0], [960, 484]], {type: 'Sphere'})
 
     path.projection(projection)
 
-    const defaultData = topojson.feature(world, world.objects.land).features
-
-    //el['graticule'].selectAll("path").remove()
-
-    elKeys.forEach(c => {
+    layers.forEach(layer => {
         
-        let d = el[c].selectAll("path")
+        let d = domElements[layer.id].selectAll('path')
         
-        if(!config.hasOwnProperty(c) || config[c]) {
+        if(!(layer.id in options) || options[layer.id]) {
 
-            let data
-
-            if(['sphere', 'mask', 'graticule'].includes(c)) {
-                data = defaultData
-            } else if(world.objects?.[c]) {
-                data = topojson.feature(world, world.objects[c]).features
-            }
+            let data = world[layer.id]
 
             if(data) {
                 
-                d.data(data)
-                    .enter()
-                    .append("path")
-                    .attr("id", function(d) {
-                        return 'id-' + d.id
-                    })
+                d.data(data).enter().append('path')
 
-                d = el[c].selectAll("path")
+                d = domElements[layer.id].selectAll('path')
 
-                switch(c) {
+                switch(layer.id) {
                     case 'mask':
                     case 'sphere':
                         d.attr('d', path({type: 'Sphere'}))
                         break
 
                     case 'graticule':
-                        d.attr("d", path(graticule))
+                        d.attr('d', path(graticule))
                         break
 
                     default:
-                        d.attr("d", path)
+                        d.attr('d', path)
                 }
+
+                if(layer?.interactive)
+                    d.on('mouseover', function(e, d) {
+                        console.log(d.properties)	
+                    })			
             }
+
         } else {
 
             d.remove()
@@ -114,26 +90,16 @@ function update(world, config) {
         }
     })
 
-    // el['graticule'].selectAll(".graticule").remove()
-
-    // el['graticule'].selectAll(".graticule")
-    //     .data(defaultData)
-    //     .enter()
-    //     .append("path")
-    //     .attr("class", 'graticule')
-    //     .attr("d", path(graticule))
-
-    styles.html(config.styles)
+    styles.html(options.styles)
 }
 
-function receive(world, config) {
-
+function receive(world, options) {
     if(!inited) {
         inited = true
         createMap()
-        update(world, config)
+        update(world, options)
     } else {
-        update(world, config)
+        update(world, options)
     }
 }
 

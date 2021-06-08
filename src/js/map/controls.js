@@ -56,28 +56,32 @@ function componentField(d) {
         }
     }
 
+    let tag = 'input'
+
     switch(d.type) {
         case 'dropdown':
+        case 'datalist':
+            tag = d.type == 'dropdown' ? 'select' : 'datalist'
             return  getLabel(d.label, labelAttrs) +
-                    getInput('select', inputAttrs, d.type, '', true) +
+                    getInput(tag, inputAttrs, d.type, '', true) +
                         `${d.values.reduce((a, c) => {
                             return a + `<option value="${c.value}"${c.value == d.default ? ' selected="selected"' : ''}>${c.label}</option>`
                         }, '')}
-                    </select>`
+                    </${tag}>`
 
         case 'checkbox':
             if(d?.default) inputAttrs.push('checked')
-            return getInput('input', inputAttrs, d.type, '', true) + getLabel(d.label, labelAttrs)
+            return getInput(tag, inputAttrs, d.type, '', true) + getLabel(d.label, labelAttrs)
 
         case 'color':
-            return getLabel(d.label, labelAttrs) + getInput('input', inputAttrs, d.type, d.default, true)
+            return getLabel(d.label, labelAttrs) + getInput(tag, inputAttrs, d.type, d.default, true)
             
         case 'button':
             return `<button ${inputAttrs.join(' ')}>${d.label}</button>`
 
         case 'range':
-            if(d.hasOwnProperty('default')) inputAttrs.push(`value="${d.default}"`)
-            return getLabel(d.label, labelAttrs) + getInput('input', inputAttrs, d.type, '', true)
+            if('default' in d) inputAttrs.push(`value="${d.default}"`)
+            return getLabel(d.label, labelAttrs) + getInput(tag, inputAttrs, d.type, '', true)
 
         default:
             return `<div class="warning">${d.label}: undefined item type.</div>`
@@ -85,6 +89,7 @@ function componentField(d) {
 }
 
 function getLabel(label, attrs) {
+    if(label == '') return ''
     return `<label ${attrs.join(' ')}>${label}</label>`
 }
 

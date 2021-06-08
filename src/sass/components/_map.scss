@@ -5,6 +5,10 @@ svg {
 }
 
 .group- {
+
+    path {
+        
+    }
         
     &sphere path {
         fill: #80c2ec;
@@ -15,11 +19,10 @@ svg {
         fill: black;
     }
 
-    &countries path {
-        fill: #f5e7bb;
-        stroke: #222;
-        stroke-opacity: .5;
+    &countries path, &languagefamilies path {
+        fill: transparent;
         stroke-width: .3px;
+        stroke: black;
 
         &:hover path {
             fill-opacity: 0;

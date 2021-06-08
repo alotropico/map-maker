@@ -7,35 +7,40 @@
 .horizontal {
     display: flex;
     flex-direction: row;
-    justify-content: flex-start;
+    justify-content: flex-end;
     height: 100%;
     overflow-x: auto;
 }
 h1 {
-    font-size: 18px;
-    font-weight: 900;
-    margin: 0 0 1rem;
-    padding: 2rem 1rem 1rem;
-    background: linear-gradient(90deg, $shadow-1, $background);
+    font-size: 28px;
+    letter-spacing: 0.06em;
+    margin: 0 $gap $gap/2;
+    padding: $gap*1.5 0 $gap/2;
+    border-bottom: 1px solid $shadow-1;
 }
 fieldset {
     margin: 0;
-    padding: 0 0 1.6rem;
+    padding: 0 0 $gap * 0.4;
     border: none;
 
     & > h3 {
-        font-size: 12px;
+        font-size: inherit;
         font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: .1em;
-        margin-bottom: 1rem;
-        padding: 1em 1rem;
-        background: linear-gradient(90deg,  $shadow-1, $background);
+        letter-spacing: 0.06em;
+        margin: 0 $gap $gap/2;
+        padding: $gap 0 0;
     }
 
     .vertical & {
+
+        &:nth-child(odd) {
+            border: 1px solid $shadow-1;
+            border-right: none;
+            border-left: none;
+        }
+        
         &:first-child {
-            padding-top: 2rem;
+            padding-top: $gap*2;
         }
 
         &.break {
@@ -44,7 +49,9 @@ fieldset {
     }
 
     .horizontal & {
-        padding: 1rem 0;
+        display: flex;
+        gap: $gap;
+        padding: $gap;
 
         &.break {
             margin-left: auto;
@@ -54,16 +61,16 @@ fieldset {
 .item {
     display: flex;
     flex-wrap: wrap;
-    gap: .5rem;
+    gap: $gap/4;
     align-items: center;
-    padding: 0 1rem .6rem;
-
-    &:last-child {
-        padding-bottom: 0;
-    }
-
+    
     img {
         flex: 0 0 auto;
+    }
+
+    .vertical & {
+        margin-bottom: $gap * 0.6;
+        padding: 0 $gap;
     }
 
     &-type-color {
@@ -73,73 +80,58 @@ fieldset {
             width: 23px;
         }
     }
+
+    &.item-type-datalist {
+        margin-bottom: 0;
+    }
+}
+.item-type-checkbox {
+    gap: $gap/2;
 }
 label {
+    display: flex;
+    justify-content: space-between;
     cursor: pointer;
     user-select: none;
+
+    & > * {
+
+    }
 }
 input[type=text], select, button {
-    padding: .5rem;
+    padding: $gap/2;
     width: 100%;
-    border-radius: 3px;
+    border-radius: 5px;
 }
 input[type=color] {
     background-color: transparent;
 }
 button {
     color: $background;
-    padding: .75rem .5rem;
-    background-color: $text;
+    padding: $gap*0.75 $gap;
+    background-color: $primary;
     border: none;
+    transition: opacity .2s ease;
     cursor: pointer;
+
+    &:hover, &:active {
+        opacity: .9;
+    }
+}
+
+.item-type-color {
+    label {
+        flex: 1 0 0;
+    }
 }
 
 .item-type-range {
+    position: relative;
+
     label {
-        width: 120px;
+        width: 100%;
     }
-}
-
-
-
-/**/
-
-@media screen and (-webkit-min-device-pixel-ratio:0) {
     input[type='range'] {
-      overflow: hidden;
-      width: 80px;
-      -webkit-appearance: none;
-      background-color: #9a905d;
+        width: 100%;
     }
-    
-    input[type='range']::-webkit-slider-runnable-track {
-      height: 10px;
-      -webkit-appearance: none;
-      color: #13bba4;
-      margin-top: -1px;
-    }
-    
-    input[type='range']::-webkit-slider-thumb {
-      width: 10px;
-      -webkit-appearance: none;
-      height: 10px;
-      cursor: ew-resize;
-      background: #434343;
-      box-shadow: -80px 0 0 80px #43e5f7;
-    }
-
-}
-/** FF*/
-input[type="range"]::-moz-range-progress {
-  background-color: #43e5f7; 
-}
-input[type="range"]::-moz-range-track {  
-  background-color: #9a905d;
-}
-/* IE*/
-input[type="range"]::-ms-fill-lower {
-  background-color: #43e5f7; 
-}
-input[type="range"]::-ms-fill-upper {  
-  background-color: #9a905d;
 }
