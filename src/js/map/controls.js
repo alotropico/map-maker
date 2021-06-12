@@ -1,7 +1,11 @@
 import * as serialize from 'form-serialize'
 
 let forms = [],
-    callback
+    callback,
+    inputTO,
+
+    change = 0,
+    submito = 0
 
 function setupForm(config, callbackFunc, formId) {
 
@@ -15,15 +19,87 @@ function setupForm(config, callbackFunc, formId) {
     
     form.innerHTML += html
 
-    form.addEventListener('input', function(){
-        submit()
+    form.addEventListener('input', function(e){
+
+        //form.submit()
+
+        e.preventDefault()
+
+        update()
+
+        //console.log('input', change++)
+
+        queSubmit()
+
+        // if(typeof inputTO !== 'undefined') clearTimeout(inputTO)
+
+        // inputTO = setTimeout(submit, 1000)
+    })
+
+    form.addEventListener('change', function(e){
+        
+        e.preventDefault()
+
+        //console.log('submit', submito++)
+
+        
+
+
+
+        // if(typeof inputTO !== 'undefined') clearTimeout(inputTO)
+
+        // inputTO = setTimeout(submit, 1000)
+        
     })
 
     form.addEventListener('submit', function(e){
         
         e.preventDefault()
-        submit()
+
+        
+        
     })
+
+    var inputs = document.querySelectorAll('input[type="number"]');
+    Array.prototype.forEach.call(inputs, function (element) {
+        element.onclick = function () {
+            element.focus()
+            element.select()
+        }
+    })
+}
+
+function queSubmit() {
+    
+    if(typeof inputTO !== 'undefined') clearTimeout(inputTO)
+
+    inputTO = setTimeout(submit, Math.round(1000/60))
+}
+
+function update() {
+    for(const i in forms) {
+
+        const form = forms[i]
+
+        const binded = form.querySelectorAll("[data-bind]")
+        
+        Array.prototype.forEach.call(binded, (element) => {
+            const   id = element.getAttribute('data-bind'),
+                    mem = element.getAttribute('data-mem') || 0,
+                    ref = form.querySelectorAll(`#${id}`)[0],
+                    pre = ref.value
+                    
+            if(mem == undefined || mem != pre) {
+                
+                element.value = pre
+                
+            } else {
+                ref.value = element.value
+            }
+
+            element.setAttribute('data-mem', element.value)
+        })
+    }
 }
 
 function fieldsetWrapper(f) {
@@ -48,13 +124,16 @@ function componentWrapper(d) {
 
 function componentField(d) {
     let inputAttrs = [`class="${d.id}"`, `id="${d.id}"`, `name="${d.id}"`],
-        labelAttrs = [`for="${d.id}"`]
+        labelAttrs = [`for="${d.id}"`],
+        configAttrs = []
 
     if(d?.attrs) {
         for(const i in d.attrs) {
-            inputAttrs.push(`${i}="${d.attrs[i]}"`)
+            configAttrs.push(`${i}="${d.attrs[i]}"`)
         }
     }
+
+    inputAttrs = [...inputAttrs, ...configAttrs]
 
     let tag = 'input'
 
@@ -71,7 +150,7 @@ function componentField(d) {
 
         case 'checkbox':
             if(d?.default) inputAttrs.push('checked')
-            return getInput(tag, inputAttrs, d.type, '', true) + getLabel(d.label, labelAttrs)
+            return getLabel(d.label, labelAttrs) + getInput(tag, inputAttrs, d.type, '', true)
 
         case 'color':
             return getLabel(d.label, labelAttrs) + getInput(tag, inputAttrs, d.type, d.default, true)
@@ -81,7 +160,11 @@ function componentField(d) {
 
         case 'range':
             if('default' in d) inputAttrs.push(`value="${d.default}"`)
-            return getLabel(d.label, labelAttrs) + getInput(tag, inputAttrs, d.type, '', true)
+            return `<div class="label-wrapper">
+                        ${getLabel(d.label, labelAttrs)}
+                        ${getInput('input', [`data-bind="${d.id}"`, `min="${d.attrs.min}"`, `max="${d.attrs.max}"`], 'number', '0', true)}
+                    </div>
+                    ${getInput(tag, inputAttrs, d.type, '', true)}`
 
         default:
             return `<div class="warning">${d.label}: undefined item type.</div>`
@@ -104,7 +187,10 @@ function submit() {
     let ret = {}
 
     for(const i in forms) {
-        ret = {...ret, ...serialize(forms[i], {
+
+        const form = forms[i]
+
+        ret = {...ret, ...serialize(form, {
             hash: true,
             empty: true,
             disable: true

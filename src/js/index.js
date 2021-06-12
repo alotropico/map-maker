@@ -6,45 +6,77 @@ import init from './app'
 init()
 
 /*
-	MAP (world, pangea, continent, country)
 
-		LABELS
-		AXIS
+	-- JUNIO
 
-		COUNTRIES
-		MICRO-STATES
-		SUBDIVISIONS
-		LAKES
-		RIVERS
-		GLACIERS
-		LANGUAGE FAMILIES
-		MAJOR CITIES
+	Finish styles
 
-		YAW, PITCH
-		
-		BACKGROUND color
-		SEA color
-		LAND color
-		COUNTRIES color
-		BORDER color
+	Fix labels
 
-		--
+	Toggle fieldsets
 
-		LEGEND
-			Typography
+	Map data (physical?)
 
-		DEFAULTS
-			Official languages
-			Life expectancy
+	Night mode
 
-	SAVE
-		Svg	
-		Png
-		Config
+	-- JULIO
 
-	SHARE
+	Load data colors
 
+	Custom data/colors
 
+	Legend box movable
+
+	-- AGOSTO
+
+	Share
+
+	URL config
+
+	Save PNG, SVG, Config
+
+	-- SETIEMBRE
+
+	Zoom on a country
+
+	Detect, zoom on user's country
+
+	Projections legends
+
+	-- OCTUBRE
+
+	Gallery of examples
+		Official languages
+		Life expectancy
+		GDP
+		Language families
+		Physical map
+
+	-- NOVIEMBRE
+
+	REACT + SCSS + PUG
+
+	-- DICIEMBRE
+
+	Transitions
+
+	-- ENERO
+
+	Public gallery
+
+	Directory
+
+	-- FEBRERO
+
+	Portal
+
+	-- MARZO
+
+	Pangea
+
+	-- ABRIL...
+
+	Add timelines
 
 	https://mapshaper.org/
 */

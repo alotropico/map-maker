@@ -1,11 +1,11 @@
 import * as d3 from 'd3'
 import * as topojson from 'topojson'
 
-import {layers} from './config.js'
+import {layers, baseStyle} from './config.js'
 
 function parseFormResults(form, config) {
     const f = form
-    f.styles = getStyles(form, config)
+    f.styles = baseStyle + getStyles(form, config)
     return f
 }
 
@@ -33,7 +33,8 @@ function parseGeoData(geoRaw) {
         land,
         sphere: land,
         mask: land,
-        graticule: land
+        graticule: land,
+        sphereline: land,
     }
 }
 

@@ -1,23 +1,3 @@
-.vertical {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    overflow-y: auto;
-}
-.horizontal {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-end;
-    height: 100%;
-    overflow-x: auto;
-}
-h1 {
-    font-size: 28px;
-    letter-spacing: 0.06em;
-    margin: 0 $gap $gap/2;
-    padding: $gap*1.5 0 $gap/2;
-    border-bottom: 1px solid $shadow-1;
-}
 fieldset {
     margin: 0;
     padding: 0 0 $gap * 0.4;
@@ -27,8 +7,8 @@ fieldset {
         font-size: inherit;
         font-weight: 700;
         letter-spacing: 0.06em;
-        margin: 0 $gap $gap/2;
-        padding: $gap 0 0;
+        margin: 0 $gap $gap*0.4;
+        padding: $gap*0.8 0 0;
     }
 
     .vertical & {
@@ -58,10 +38,25 @@ fieldset {
         }
     }
 }
+
+.vertical {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow-y: auto;
+}
+
+.horizontal {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    height: 100%;
+    overflow-x: auto;
+}
+
 .item {
     display: flex;
     flex-wrap: wrap;
-    gap: $gap/4;
     align-items: center;
     
     img {
@@ -69,25 +64,61 @@ fieldset {
     }
 
     .vertical & {
-        margin-bottom: $gap * 0.6;
+        margin-bottom: $gap * 0.4;
         padding: 0 $gap;
     }
 
     &-type-color {
         justify-content: space-between;
 
-        input {
-            width: 23px;
+        label {
+            flex: 1 0 0;
         }
     }
 
-    &.item-type-datalist {
+    &-type-datalist {
         margin-bottom: 0;
     }
+    
+    &-type-checkbox {
+        justify-content: space-between;
+
+        label {
+            flex: 1 0 0;
+        }
+    }
+    
+    &-type-range {
+        position: relative;
+    
+        label {
+            width: 100%;
+        }
+
+        input[type='range'] {
+            width: 100%;
+        }
+    }
 }
-.item-type-checkbox {
-    gap: $gap/2;
+
+.label-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    
+    & > label {
+        flex: 1 0 0;
+        width: auto;
+    }
+    & > input[type=number] {
+        font-size: 14px;
+        flex: 0 0 70px;
+        padding: $gap/4 $gap/2;
+        box-shadow: inset 0 1px 3px rgba(black, calc(var(--shadow-intensity) * 4));
+    }
 }
+
 label {
     display: flex;
     justify-content: space-between;
@@ -98,14 +129,23 @@ label {
 
     }
 }
-input[type=text], select, button {
+
+input[type=text], input[type=number], select, button {
     padding: $gap/2;
     width: 100%;
+    border: 1px solid var(--penumbra);
     border-radius: 5px;
 }
+
+input[type=checkbox] {
+    margin: 0 $gap/4;
+}
+
 input[type=color] {
+    width: 23px;
     background-color: transparent;
 }
+
 button {
     color: $background;
     padding: $gap*0.75 $gap;
@@ -116,22 +156,5 @@ button {
 
     &:hover, &:active {
         opacity: .9;
-    }
-}
-
-.item-type-color {
-    label {
-        flex: 1 0 0;
-    }
-}
-
-.item-type-range {
-    position: relative;
-
-    label {
-        width: 100%;
-    }
-    input[type='range'] {
-        width: 100%;
     }
 }

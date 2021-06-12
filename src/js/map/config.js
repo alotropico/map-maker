@@ -1,41 +1,63 @@
 const layers = [
     {
         id: 'mask',
-        label: '',
         default: true,
         hideInput: true,
 
-        interactive: false
+        interactive: false,
+        uselabels: false
+    },
+    {
+        id: 'sphereline',
+        label: 'Contour',
+        default: true,
+
+        interactive: false,
+        unmasked: true,
+        uselabels: false,
+
+        styles: {stroke: 'halo'}
     },
     {
         id: 'sphere',
         label: 'Background',
         default: true,
-        // attrs: {disabled: 'disabled'},
+        //attrs: {disabled: 'disabled'},
 
-        interactive: false
+        interactive: false,
+        uselabels: false,
+
+        styles: {fill: 'background'}
     },
     {
         id: 'graticule',
         label: 'Show Graticule (Grid)',
         default: true,
 
-        interactive: false
+        interactive: false,
+        uselabels: false,
+
+        styles: {stroke: 'graticule'}
     },
     {
         id: 'land',
         label: 'Land',
         default: true,
 
-        interactive: false
+        interactive: false,
+        uselabels: true,
+
+        styles: {fill: 'land'}
     },
     {
         id: 'languagefamilies',
-        label: 'Language families',
+        label: 'Language Families',
         default: false,
 
         interactive: true,
-        uselabels: true
+        uselabels: true,
+
+        styles: {fill: 'zone', stroke: 'line'}
     },
     {
         id: 'countries',
@@ -43,15 +65,21 @@ const layers = [
         default: true,
 
         interactive: true,
-        uselabels: true
+        //unmasked: true,
+        uselabels: true,
+
+        styles: {fill: 'zone', stroke: 'line'}
     },
     {
         id: 'tinycountries',
-        label: 'Tiny countries',
+        label: 'Tiny Countries',
         default: false,
 
         interactive: true,
-        uselabels: true
+        //unmasked: true,
+        uselabels: true,
+
+        styles: {fill: 'zone', stroke: 'line'}
     },
     {
         id: 'cities',
@@ -59,16 +87,10 @@ const layers = [
         default: false,
 
         interactive: true,
-        uselabels: true
-    }/* ,
-    {
-        id: 'labels',
-        label: 'Show labels',
-        default: true,
+        uselabels: true,
 
-        interactive: false,
-        svgtype: 'text'
-    } */
+        styles: {fill: 'spot', stroke: 'line'}
+    }
 ]
 
 const defaultDatalistValues = Array(10).fill(40)
@@ -76,13 +98,14 @@ const defaultDatalistValues = Array(10).fill(40)
 
 const tools = [
     {
+        label: 'Projection',
         type: 'fieldset',
         fields: [
             {
-                label: 'Projection',
+                label: '',
                 id: 'projection',
                 type: 'dropdown',
-                default: 'geoNaturalEarth1',
+                default: 'geoOrthographic',
                 values: [
 
                     // Natural - subjective
@@ -224,11 +247,10 @@ const tools = [
                 label: 'Lateral Rotation [λ]',
                 id: 'rotation',
                 type: 'range',
-                default: 0,
+                default: -60,
                 attrs: {
                     min: -180,
                     max: 180,
-                    step: 2,
                     list: 'rotation-ticks'
                 }
             },
@@ -242,11 +264,10 @@ const tools = [
                 label: 'Vertical Rotation [φ]',
                 id: 'translation',
                 type: 'range',
-                default: 0,
+                default: -39,
                 attrs: {
                     min: -180,
                     max: 180,
-                    step: 2,
                     list: 'translation-ticks'
                 }
             },
@@ -260,11 +281,10 @@ const tools = [
                 label: 'Clock Rotation [γ]',
                 id: 'tilt',
                 type: 'range',
-                default: 0,
+                default: -3,
                 attrs: {
                     min: -180,
                     max: 180,
-                    step: 2,
                     list: 'tilt-ticks'
                 }
             },
@@ -284,7 +304,7 @@ const tools = [
                 label: 'Labels',
                 id: 'labels',
                 type: 'checkbox',
-                default: true
+                default: false
             },
             ...layers.filter(l => !l.hideInput).reverse().map(l => {
                 return {
@@ -305,7 +325,7 @@ const tools = [
                 label: 'Seas',
                 id: 'color-seas',
                 type: 'color',
-                default: '#6da9ce',
+                default: '#78bcdd',
                 css: 'fill',
                 identifiers: ['.group-sphere path']
             },
@@ -313,20 +333,29 @@ const tools = [
                 label: 'Land',
                 id: 'color-land',
                 type: 'color',
-                default: '#F7E6B1',
+                default: '#f3dea5',
                 css: 'fill',
-                identifiers: ['.group-land path'/* , '.group-countries path' */]
+                identifiers: [
+                    '.group-land path',
+                    '.group-cities path',
+                    '.group-tinycountries path'
+                ]
             },
             {
-                label: 'Countrie\'s borders',
+                label: 'Shape\'s Lines',
                 id: 'color-lines',
                 type: 'color',
-                default: '#333333',
+                default: '#917f6e',
                 css: 'stroke',
-                identifiers: ['.group-countries path']
+                identifiers: [
+                    '.group-countries path',
+                    '.group-languagefamilies path',
+                    '.group-cities path',
+                    '.group-tinycountries path'
+                ]
             },
             {
-                label: 'Graticule lines',
+                label: 'Graticule\'s Lines',
                 id: 'color-graticule',
                 type: 'color',
                 default: '#ffffff',
@@ -334,7 +363,15 @@ const tools = [
                 identifiers: ['.group-graticule path']
             },
             {
-                label: 'Texts',
+                label: 'Contour Line',
+                id: 'color-contour',
+                type: 'color',
+                default: '#71adca',
+                css: 'stroke',
+                identifiers: ['.group-sphereline path']
+            },
+            {
+                label: 'Text',
                 id: 'color-texts',
                 type: 'color',
                 default: '#333333',
@@ -363,4 +400,33 @@ const panels = [
     }
 ]
 
-export {layers, tools, panels}
+const baseStyle = `
+    text {
+        font-family: $font-family, Helvetica, Arial, sans-serif;
+        font-size: 10px;
+        text-align: center;
+        font-weight: 900;
+    }
+
+    .group-sphereline path {
+        fill: none;
+        stroke-width: 2.4px;
+    }
+
+    .group-countries path, .group-languagefamilies path {
+        fill: none;
+        stroke-width: .3px;
+    }
+
+    .group-tinycountries path, .group-cities path {
+        fill: none;
+        stroke-width: .3px;
+    }
+
+    .group-graticule path {
+        fill: none;
+        opacity: .5;
+        stroke-width: .3px;
+    }`
+
+export {layers, tools, panels, baseStyle}

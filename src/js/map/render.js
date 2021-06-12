@@ -27,10 +27,12 @@ function createMap() {
         .attr('id', 'mask')
 
     layers.forEach(layer => {
+        console.log(layer)
+        
         if(layer.id != 'mask'){
             domElements[layer.id] = svg.append('g')
             .attr('class', 'group-' + layer.id)
-            .attr('clip-path', 'url(#mask)')
+            .attr('clip-path', !layer?.unmasked ? 'url(#mask)' : '')
         }
     })
 
@@ -47,7 +49,7 @@ function update(geoData, options, labels) {
     projection = d3[options.projection]()
         .center([0, 0])
         .rotate([360 - options.rotation, 360 - options.translation, 360 - options.tilt])
-        .fitExtent([[0, 0], [960, 484]], {type: 'Sphere'})
+        .fitExtent([[10, 10], [960 - 20, 484 - 20]], {type: 'Sphere'})
 
     path.projection(projection)
 
@@ -68,6 +70,7 @@ function update(geoData, options, labels) {
                 switch(layer.id) {
                     case 'mask':
                     case 'sphere':
+                    case 'sphereline':
                         d.attr('d', path({type: 'Sphere'}))
                         break
 
@@ -81,7 +84,7 @@ function update(geoData, options, labels) {
 
                 if(layer?.interactive)
                     d.on('mouseover', function(e, d) {
-                        //console.log(d.properties)	
+                        console.log(d.properties)	
                     })
             }
 
@@ -109,7 +112,7 @@ function update(geoData, options, labels) {
                 return path.centroid(g.geometry)[0]
             }
             catch(e) {
-                console.log(e)
+                //console.log(e)
             }
             return 0
         })
@@ -118,7 +121,7 @@ function update(geoData, options, labels) {
                 return path.centroid(g.geometry)[1]
             }
             catch(e) {
-                console.log(e)
+                //console.log(e)
             }
             return 0
         })
