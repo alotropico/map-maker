@@ -34,36 +34,41 @@ const layers = [
         label: 'Language families',
         default: false,
 
-        interactive: true
+        interactive: true,
+        uselabels: true
     },
     {
         id: 'countries',
         label: 'Countries',
         default: true,
 
-        interactive: true
+        interactive: true,
+        uselabels: true
     },
     {
         id: 'tinycountries',
         label: 'Tiny countries',
         default: false,
 
-        interactive: true
+        interactive: true,
+        uselabels: true
     },
     {
         id: 'cities',
         label: 'Major Cities',
         default: false,
 
-        interactive: true
-    },
+        interactive: true,
+        uselabels: true
+    }/* ,
     {
         id: 'labels',
         label: 'Show labels',
         default: true,
 
-        interactive: false
-    }
+        interactive: false,
+        svgtype: 'text'
+    } */
 ]
 
 const defaultDatalistValues = Array(10).fill(40)
@@ -213,9 +218,6 @@ const tools = [
                     {label: 'Nicolosi', value: 'geoNicolosi'},
 
                     {label: 'SinuMollweide', value: 'geoSinuMollweide'},
-                    
-                    
-                    
                 ]
             },
             {
@@ -226,7 +228,7 @@ const tools = [
                 attrs: {
                     min: -180,
                     max: 180,
-                    step: 5,
+                    step: 2,
                     list: 'rotation-ticks'
                 }
             },
@@ -244,7 +246,7 @@ const tools = [
                 attrs: {
                     min: -180,
                     max: 180,
-                    step: 5,
+                    step: 2,
                     list: 'translation-ticks'
                 }
             },
@@ -262,7 +264,7 @@ const tools = [
                 attrs: {
                     min: -180,
                     max: 180,
-                    step: 5,
+                    step: 2,
                     list: 'tilt-ticks'
                 }
             },
@@ -277,15 +279,23 @@ const tools = [
     {
         label: 'Features',
         type: 'fieldset',
-        fields: layers.filter(l => !l.hideInput).reverse().map(l => {
-            return {
-                label: l.label,
-                id: l.id,
+        fields: [
+            {
+                label: 'Labels',
+                id: 'labels',
                 type: 'checkbox',
-                default: l.default,
-                attrs: l?.attrs ? l.attrs : false
-            }
-        })
+                default: true
+            },
+            ...layers.filter(l => !l.hideInput).reverse().map(l => {
+                return {
+                    label: l.label,
+                    id: l.id,
+                    type: 'checkbox',
+                    default: l.default,
+                    attrs: l?.attrs ? l.attrs : false
+                }
+            })
+        ]
     },
     {
         label: 'Colors',

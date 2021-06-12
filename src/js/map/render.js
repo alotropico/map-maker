@@ -33,6 +33,8 @@ function createMap() {
             .attr('clip-path', 'url(#mask)')
         }
     })
+
+    domElements['labels'] = svg.append('g').attr('id', 'labels')
     
     path = d3.geoPath()
     graticule = d3.geoGraticule10()
@@ -40,7 +42,7 @@ function createMap() {
 
 let projection
 
-function update(world, options) {
+function update(geoData, options, labels) {
 
     projection = d3[options.projection]()
         .center([0, 0])
@@ -52,10 +54,10 @@ function update(world, options) {
     layers.forEach(layer => {
         
         let d = domElements[layer.id].selectAll('path')
-        
+
         if(!(layer.id in options) || options[layer.id]) {
 
-            let data = world[layer.id]
+            let data = geoData[layer.id]
 
             if(data) {
                 
@@ -79,8 +81,8 @@ function update(world, options) {
 
                 if(layer?.interactive)
                     d.on('mouseover', function(e, d) {
-                        console.log(d.properties)	
-                    })			
+                        //console.log(d.properties)	
+                    })
             }
 
         } else {
@@ -90,17 +92,49 @@ function update(world, options) {
         }
     })
 
+    //if(options.labels) {
+    const d = domElements['labels'].selectAll('text').data(labels)
+
+    //d.exit().remove()
+    
+    d.join('text')
+        .text((g) => {
+            return  g?.properties?.POSTAL ? g.properties.POSTAL : g?.properties?.layer ? g.properties.layer : ''
+            //return g?.properties?.scalerank == 1 && g.properties?.['iso_a2'] ? g.properties['iso_a2'] : ''
+        })
+        .attr('text-anchor', 'middle')
+        // .attr('width', 40)
+        .attr('x', g => {
+            try {
+                return path.centroid(g.geometry)[0]
+            }
+            catch(e) {
+                console.log(e)
+            }
+            return 0
+        })
+        .attr('y', g => {
+            try {
+                return path.centroid(g.geometry)[1]
+            }
+            catch(e) {
+                console.log(e)
+            }
+            return 0
+        })
+    // } else {
+    //     domElements['labels'].selectAll('text').remove()
+    // }
+
     styles.html(options.styles)
 }
 
-function receive(world, options) {
+function receive(geoData, options, labels) {
     if(!inited) {
         inited = true
         createMap()
-        update(world, options)
-    } else {
-        update(world, options)
     }
+    update(geoData, options, labels)
 }
 
 export default receive

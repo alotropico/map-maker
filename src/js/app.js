@@ -1,7 +1,7 @@
 import {tools, panels} from './map/config.js'
 import fetcher from './map/fetcher.js'
 import {setupForm, submit} from './map/controls.js'
-import {parseFormResults, parseGeoData} from './map/parser.js'
+import {parseFormResults, parseGeoData, parseLabels} from './map/parser.js'
 import render from './map/render.js'
 
 let geoData = {}
@@ -34,8 +34,10 @@ function update(toolsOptions) {
 	// parse submited form data
 	const options = parseFormResults(toolsOptions, tools)
 
+	const labels = parseLabels(geoData, options)
+
 	// render map with parsed data
-	render(geoData, options)
+	render(geoData, options, labels)
 }
 
 export default init
