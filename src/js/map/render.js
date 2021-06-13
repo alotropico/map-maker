@@ -11,7 +11,8 @@ let svg,
     graticule,
     styles,
 
-    domElements = {}
+    domElements = {},
+    projection
 
 function createMap() {
 
@@ -26,9 +27,7 @@ function createMap() {
     domElements['mask'] = svg.append('clipPath')
         .attr('id', 'mask')
 
-    layers.forEach(layer => {
-        console.log(layer)
-        
+    layers.forEach(layer => {        
         if(layer.id != 'mask'){
             domElements[layer.id] = svg.append('g')
             .attr('class', 'group-' + layer.id)
@@ -41,8 +40,6 @@ function createMap() {
     path = d3.geoPath()
     graticule = d3.geoGraticule10()
 }
-
-let projection
 
 function update(geoData, options, labels) {
 
@@ -89,47 +86,66 @@ function update(geoData, options, labels) {
             }
 
         } else {
-
             d.remove()
-
         }
     })
-
-    //if(options.labels) {
+    
     const d = domElements['labels'].selectAll('text').data(labels)
-
-    //d.exit().remove()
     
     d.join('text')
-        .text((g) => {
-            return  g?.properties?.POSTAL ? g.properties.POSTAL : g?.properties?.layer ? g.properties.layer : ''
-            //return g?.properties?.scalerank == 1 && g.properties?.['iso_a2'] ? g.properties['iso_a2'] : ''
+        .each(function(d) {
+
+            const   areaMax = 10000,
+                    bestArea = largestPolygon(d),
+                    preCentroid = {type: 'Point', coordinates: d3.geoCentroid(bestArea)},
+                    $this = d3.select(this),
+                    centroid = path.centroid(preCentroid), //path.centroid(preCentroid),
+                    area = path.area(bestArea),
+                    areaBounded = area > areaMax ? areaMax : area,
+                    geoType = d.geometry.type
+                    
+            if(areaBounded < 1 && geoType !== 'Point') $this.remove()
+            $this.style('font-size', `${((areaBounded/areaMax) * 6 + 5).toFixed(2)}px`)
+
+            const label = areaBounded > areaMax*0.3 ?
+                getProperties(d.properties, ['BRK_NAME', 'BRK_A3', 'layer']) : 
+                areaBounded > areaMax*0.1 ?
+                getProperties(d.properties, ['BRK_A3', 'layer']) :
+                getProperties(d.properties, ['WB_A2', 'POSTAL', 'layer']) 
+
+            $this.text(label)
+
+            if(!isNaN(centroid[0]) && !isNaN(centroid[1])) {
+                $this.attr('x', centroid[0])
+                $this.attr('y', centroid[1])
+            } else {
+                $this.remove()
+            }
         })
-        .attr('text-anchor', 'middle')
-        // .attr('width', 40)
-        .attr('x', g => {
-            try {
-                return path.centroid(g.geometry)[0]
-            }
-            catch(e) {
-                //console.log(e)
-            }
-            return 0
-        })
-        .attr('y', g => {
-            try {
-                return path.centroid(g.geometry)[1]
-            }
-            catch(e) {
-                //console.log(e)
-            }
-            return 0
-        })
-    // } else {
-    //     domElements['labels'].selectAll('text').remove()
-    // }
 
     styles.html(options.styles)
+}
+
+function largestPolygon(d) {
+    if(d.geometry.type == 'Point' || d.geometry.type == 'Polygon') return d.geometry
+
+    let best = false
+    let bestArea = 0
+    d.geometry.coordinates.forEach(function(coords) {
+        let poly = { type: 'Polygon', coordinates: coords },
+            area = path.area(poly)
+
+        if(area > bestArea) {
+            bestArea = area
+            best = poly
+        }
+    })
+    return best
+}
+
+function getProperties(obj, ar) {
+    const found = ar.find(a => obj?.[a])
+    return found && obj[found] != -99 ? obj[found] : ''
 }
 
 function receive(geoData, options, labels) {

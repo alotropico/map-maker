@@ -9,15 +9,24 @@ init()
 
 	-- JUNIO
 
-	Finish styles
+	* Finish styles
 
-	Fix labels
+	* Fix labels
+
+	* Sort labels by area instead of population
+
+	* Change text labels according to available space
+
+	Displace labels by voronoi
+
+	Save as SVG
 
 	Toggle fieldsets
 
-	Map data (physical?)
+	Cleaner/more accurate map data
 
 	Night mode
+
 
 	-- JULIO
 
@@ -27,13 +36,15 @@ init()
 
 	Legend box movable
 
+
 	-- AGOSTO
 
 	Share
 
 	URL config
 
-	Save PNG, SVG, Config
+	Save PNG, Config
+
 
 	-- SETIEMBRE
 
@@ -42,6 +53,7 @@ init()
 	Detect, zoom on user's country
 
 	Projections legends
+
 
 	-- OCTUBRE
 
@@ -52,13 +64,16 @@ init()
 		Language families
 		Physical map
 
+
 	-- NOVIEMBRE
 
 	REACT + SCSS + PUG
 
+
 	-- DICIEMBRE
 
 	Transitions
+
 
 	-- ENERO
 
@@ -66,17 +81,41 @@ init()
 
 	Directory
 
+
 	-- FEBRERO
 
 	Portal
+
 
 	-- MARZO
 
 	Pangea
 
+
 	-- ABRIL...
 
 	Add timelines
+	
+	https://github.com/nvkelso/natural-earth-vector/tree/master/geojson
+	https://github.com/mattdzugan/World-Population-Cartogram
 
+	EDIT GEOJSON + TOPOJSON + SHAPEFILE
 	https://mapshaper.org/
+
+	SAVE PNG
+	https://www.npmjs.com/package/save-svg-as-png
+
+	https://hub.arcgis.com/datasets/esri::world-countries-generalized/explore?location=-27.208559%2C-43.588005%2C5.28
+
+	ICONS
+	https://github.com/djaiss/mapsicon
+
+	COUNTRY CODES
+	https://gist.github.com/djaiss/2938259
+
+	GINI
+	https://opendata.stackexchange.com/questions/14180/gini-indices-of-wealth-for-each-country
+
+	CENTROIDS
+	https://observablehq.com/@neocartocnrs/some-experiments-with-d3-geo
 */

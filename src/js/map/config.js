@@ -16,7 +16,8 @@ const layers = [
         unmasked: true,
         uselabels: false,
 
-        styles: {stroke: 'halo'}
+        styles: {stroke: 'halo'},
+        stylesDefault: {fill: 'none', stroke_width: '2.4px'}
     },
     {
         id: 'sphere',
@@ -37,7 +38,8 @@ const layers = [
         interactive: false,
         uselabels: false,
 
-        styles: {stroke: 'graticule'}
+        styles: {stroke: 'graticule'},
+        stylesDefault: {fill: 'none', stroke_width: '.3px', opacity: '.5'}
     },
     {
         id: 'land',
@@ -57,7 +59,8 @@ const layers = [
         interactive: true,
         uselabels: true,
 
-        styles: {fill: 'zone', stroke: 'line'}
+        styles: {fill: 'zone', stroke: 'line'},
+        stylesDefault: {fill: 'none', stroke_width: '.3px'}
     },
     {
         id: 'countries',
@@ -68,7 +71,8 @@ const layers = [
         //unmasked: true,
         uselabels: true,
 
-        styles: {fill: 'zone', stroke: 'line'}
+        styles: {fill: 'zone', stroke: 'line'},
+        stylesDefault: {fill: 'none', stroke_width: '.3px'}
     },
     {
         id: 'tinycountries',
@@ -79,7 +83,8 @@ const layers = [
         //unmasked: true,
         uselabels: true,
 
-        styles: {fill: 'zone', stroke: 'line'}
+        styles: {fill: 'spot', stroke: 'line'},
+        stylesDefault: {fill: 'none', stroke_width: '.3px'}
     },
     {
         id: 'cities',
@@ -89,7 +94,8 @@ const layers = [
         interactive: true,
         uselabels: true,
 
-        styles: {fill: 'spot', stroke: 'line'}
+        styles: {fill: 'spot', stroke: 'line'},
+        stylesDefault: {fill: 'none', stroke_width: '.3px'}
     }
 ]
 
@@ -105,7 +111,7 @@ const tools = [
                 label: '',
                 id: 'projection',
                 type: 'dropdown',
-                default: 'geoOrthographic',
+                default: 'geoNaturalEarth1',
                 values: [
 
                     // Natural - subjective
@@ -247,7 +253,7 @@ const tools = [
                 label: 'Lateral Rotation [λ]',
                 id: 'rotation',
                 type: 'range',
-                default: -60,
+                default: 0, //-60,
                 attrs: {
                     min: -180,
                     max: 180,
@@ -264,7 +270,7 @@ const tools = [
                 label: 'Vertical Rotation [φ]',
                 id: 'translation',
                 type: 'range',
-                default: -39,
+                default: 0, //-39,
                 attrs: {
                     min: -180,
                     max: 180,
@@ -281,7 +287,7 @@ const tools = [
                 label: 'Clock Rotation [γ]',
                 id: 'tilt',
                 type: 'range',
-                default: -3,
+                default: 0, //-3,
                 attrs: {
                     min: -180,
                     max: 180,
@@ -304,7 +310,7 @@ const tools = [
                 label: 'Labels',
                 id: 'labels',
                 type: 'checkbox',
-                default: false
+                default: true
             },
             ...layers.filter(l => !l.hideInput).reverse().map(l => {
                 return {
@@ -326,57 +332,56 @@ const tools = [
                 id: 'color-seas',
                 type: 'color',
                 default: '#78bcdd',
-                css: 'fill',
-                identifiers: ['.group-sphere path']
+                css: 'background'
             },
             {
                 label: 'Land',
                 id: 'color-land',
                 type: 'color',
                 default: '#f3dea5',
-                css: 'fill',
-                identifiers: [
-                    '.group-land path',
-                    '.group-cities path',
-                    '.group-tinycountries path'
-                ]
+                css: 'land'
+            },
+            // {
+            //     label: 'Zones',
+            //     id: 'color-zone',
+            //     type: 'color',
+            //     default: '#f3dea5',
+            //     css: 'land'
+            // },
+            {
+                label: 'Spots',
+                id: 'color-spot',
+                type: 'color',
+                default: '#f3dea5',
+                css: 'spot'
             },
             {
                 label: 'Shape\'s Lines',
                 id: 'color-lines',
                 type: 'color',
                 default: '#917f6e',
-                css: 'stroke',
-                identifiers: [
-                    '.group-countries path',
-                    '.group-languagefamilies path',
-                    '.group-cities path',
-                    '.group-tinycountries path'
-                ]
+                css: 'line'
             },
             {
                 label: 'Graticule\'s Lines',
                 id: 'color-graticule',
                 type: 'color',
                 default: '#ffffff',
-                css: 'stroke',
-                identifiers: ['.group-graticule path']
+                css: 'graticule'
             },
             {
                 label: 'Contour Line',
                 id: 'color-contour',
                 type: 'color',
                 default: '#71adca',
-                css: 'stroke',
-                identifiers: ['.group-sphereline path']
+                css: 'halo'
             },
             {
                 label: 'Text',
                 id: 'color-texts',
                 type: 'color',
                 default: '#333333',
-                css: 'color',
-                identifiers: ['.group-labels path']
+                css: 'text'
             }
         ]
     }
@@ -400,33 +405,12 @@ const panels = [
     }
 ]
 
-const baseStyle = `
-    text {
-        font-family: $font-family, Helvetica, Arial, sans-serif;
-        font-size: 10px;
-        text-align: center;
-        font-weight: 900;
-    }
-
-    .group-sphereline path {
-        fill: none;
-        stroke-width: 2.4px;
-    }
-
-    .group-countries path, .group-languagefamilies path {
-        fill: none;
-        stroke-width: .3px;
-    }
-
-    .group-tinycountries path, .group-cities path {
-        fill: none;
-        stroke-width: .3px;
-    }
-
-    .group-graticule path {
-        fill: none;
-        opacity: .5;
-        stroke-width: .3px;
-    }`
+const baseStyle = `text{font-family: Arial, sans-serif; alignment-baseline: middle; text-anchor: middle; font-weight: 400;}
+text.big{font-size: 16px;}
+text.defaut{font-size: 14px;}
+text.medium{font-size: 13px;}
+text.small{font-size: 11px;}
+text.smaller{font-size: 8px;}
+text.smallest{font-size: 4px;}`
 
 export {layers, tools, panels, baseStyle}

@@ -3,33 +3,62 @@ import * as topojson from 'topojson'
 
 import {layers, baseStyle} from './config.js'
 
-function parseFormResults(form, config) {
+function parseFormResults(form, tools) {
     const f = form
-    f.styles = baseStyle + getStyles(form, config)
+    f.styles = baseStyle + getStyles(form, tools)
     return f
 }
 
 function getStyles(form, config) {
+
+    const values = getCssProperties(config).filter(c => c.id in form) // Exclude css attributes not in the form
     
-    return getCssProperties(config)
-        .filter(c => c.id in form)
-        .reduce((a, c) => a + c.identifiers.reduce((b, d) => b + `${d}{${c.css}: ${form[c.id]};}`, ''), '')
+    return layers
+        .filter(c => form[c.id]) // Excluded layers
+        .map(layer => {
+
+        const properties = []
+
+        for(const property in layer.stylesDefault) {
+            properties.push( `${property.replace(/_/g, '-')}: ${layer.stylesDefault[property]};`)
+        }
+
+        for(const property in layer.styles) {
+
+            const targetCss = layer.styles[property]
+            const value = values.find(v => v.css == targetCss)
+
+            if(value || value === 0) {
+                properties.push( `${property.replace(/_/g, '-')}: ${form[value.id]};`)
+            }
+        }
+
+        if(properties.length) {
+            return `.group-${layer.id}{${properties.join(' ')}}`
+        }
+        
+    })
+    .filter(l => l)
+    .join('\n')
 }
 
 function getCssProperties(config) {
+    // Get all objects with a css property in the config
+    // in a one dimensional array
     return config.reduce((a, c) => [...a, ...c.fields.filter(f => f?.css)], [])
 }
 
 // Gets geoJson or topoJson data and returns geoJson
 function parseGeoData(geoRaw) {
-    const land = parseGeoDataSet(geoRaw.world, geoRaw.world.objects.land)
+    const land = parseGeoDataSet(geoRaw.world, geoRaw.world.objects.land),
+            countries = parseGeoDataSet(geoRaw.countries, geoRaw.countries.objects.ne_10m_admin_0_countries)
     return {
         cities: parseGeoDataSet(geoRaw.cities, geoRaw.cities.objects.ne_110m_populated_places_simple),
         languagefamilies: parseGeoDataSet(geoRaw.languagefamilies, geoRaw.languagefamilies.objects['world-2']),
         tinycountries: parseGeoDataSet('', geoRaw.tinycountries),
-        countries: parseGeoDataSet(geoRaw.countries, geoRaw.countries.objects.ne_10m_admin_0_countries), // parseGeoDataSet(geoRaw.world, geoRaw.world.objects.countries)
+        countries,
         countrieshq: parseGeoDataSet('', geoRaw.countrieshq),
-        labels:  parseGeoDataSet('', geoRaw.countrieshq),
+        labels: getBiggestShape(countries),
         land,
         sphere: land,
         mask: land,
@@ -48,17 +77,11 @@ function parseLabels(geoData, options) {
     return  layers.filter(layer => layer?.uselabels && options?.[layer.id]) // Remove hidden/non-labelable layers
             .reduce((a, layer) => [...a, ...geoData[layer.id]], [])         // Combine layers
             .filter(e => e?.geometry?.coordinates)                          // Remove shapes without coordinates
-            /* .map(e => {
-                const f = e
-                f.geometry.coordinates = getCentroid(e.geometry)
+}
 
-                if(e.properties.ADM0_A3_IS == 'FRA') {
-                    console.log(f)
-                    //console.log(getCentroid(e.geometry.coordinates))
-                }
-                
-                return f
-            }) */
+function getBiggestShape(data) {
+    //console.log(data)
+    return data
 }
 
 function getCentroid(e) {
@@ -86,29 +109,6 @@ function getCentroid(e) {
     if(m?.[0]) return [m[0]]
 
     return m
-
-
-    if(mainShape.length === 1) return mainShape[0]
-
-    /* const box = mainShape[0][0].reduce((c, d) => {
-        //console.log(c, d)
-                if(!d?.[0] || !d?.[1] || isNaN(d[0]) || isNaN(d[1])) return c
-                return [
-                            [
-                                d[0] < c[0][0] ? d[0] : c[0][0],
-                                d[0] > c[0][1] ? d[0] : c[0][1]
-                            ],
-                            [
-                                d[1] < c[1][0] ? d[1] : c[1][0],
-                                d[1] > c[1][1] ? d[1] : c[1][1]
-                            ]
-                        ]
-            }, [
-                [mainShape[0][0], mainShape[0][0]],
-                [mainShape[0][1], mainShape[0][1]]
-            ]) */
-
-    return mainShape //[box[0][0] + (box[0][1] - box[0][0]) / 2, box[1][0] + (box[1][1] - box[1][0]) / 2]
 }
 
 export {parseFormResults, parseGeoData, parseLabels}
