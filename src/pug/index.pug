@@ -5,15 +5,28 @@ html(lang="en")
 	head
 		meta(charset="UTF-8")
 		meta(name="viewport", content="width=device-width, initial-scale=1.0")
+
+		title GEO Map Maker
+		meta(name="description", content="A fully on-line custom world-map maker. Editor to generate world chart maps with countries in custom colors.")
+		meta(rel="canonical", href="https://geomapmaker.com")
+
+		meta(property='og:type' content='website')
+		meta(property='og:title' content='Geo World Map Maker')
+		meta(property='og:description' content='Generate a PNG or SVG Map in seconds, with 87 projections to choose from and custom options.')
+		meta(property='og:image' content='/images/geo-map-maker.png')
+		meta(property='og:url' content='https://geomapmaker.com')
+		meta(property='og:site_name' content='GEO Map Maker')
+		link(rel='icon' type='image/png' href='/images/favicon.png')
+
 	body.dark-mode-off
 		#app.app
 			aside.tools-wrapper
 				form#tools.tools.vertical
-					h1 Map Generator
+					h1 GEO Map Maker
 					
 			.canvas
 				main.map
-					svg(data-map, width="960", height="484")
+					svg(data-map, width="1920", height="968")
 
 				aside.panels-wrapper
 					form#panels.panels.horizontal

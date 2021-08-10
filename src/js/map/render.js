@@ -22,6 +22,8 @@ function createMap() {
 
     svg.attr('viewBox', '0 0 960 484')
 
+    svg.attr('id', 'render')
+
     styles = svg.append('style')
 
     domElements['mask'] = svg.append('clipPath')

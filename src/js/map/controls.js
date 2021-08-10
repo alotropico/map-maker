@@ -2,10 +2,7 @@ import * as serialize from 'form-serialize'
 
 let forms = [],
     callback,
-    inputTO,
-
-    change = 0,
-    submito = 0
+    inputTO
 
 function setupForm(config, callbackFunc, formId) {
 
@@ -13,11 +10,26 @@ function setupForm(config, callbackFunc, formId) {
     
     const form = forms[formId]
     
-    const html = config.map(f => fieldsetWrapper(f) ).join('')
+    const html = config.map(fieldset => fieldsetWrapper(fieldset) ).join('')
+
+    // if(d?.actions) {
+    //     for(const i in d.actions) {
+    //         configActions.push(`${i}="${d.attrs[i]}"`)
+    //     }
+    // }
 
     callback = callbackFunc
     
     form.innerHTML += html
+
+    config.reduce((ac, fieldset) => {
+        const ob = fieldset.fields.filter(field => field?.actions).reduce((a, b) => [...a, b], [])
+        return ob && ob.length && [...ac, ...ob] || ac
+    }, [])
+    .forEach(b => {
+        const e = document.getElementById(b.id)
+        Object.keys(b.actions).forEach(key => e[key] = b.actions[key])
+    })
 
     form.addEventListener('input', function(e){
 
@@ -55,12 +67,10 @@ function setupForm(config, callbackFunc, formId) {
     form.addEventListener('submit', function(e){
         
         e.preventDefault()
-
-        
         
     })
 
-    var inputs = document.querySelectorAll('input[type="number"]');
+    var inputs = document.querySelectorAll('input[type="number"]')
     Array.prototype.forEach.call(inputs, function (element) {
         element.onclick = function () {
             element.focus()
@@ -81,7 +91,7 @@ function update() {
 
         const form = forms[i]
 
-        const binded = form.querySelectorAll("[data-bind]")
+        const binded = form.querySelectorAll('[data-bind]')
         
         Array.prototype.forEach.call(binded, (element) => {
             const   id = element.getAttribute('data-bind'),
@@ -133,7 +143,9 @@ function componentField(d) {
         }
     }
 
-    inputAttrs = [...inputAttrs, ...configAttrs]
+    inputAttrs = [...inputAttrs, ...configAttrs].map(d => {
+        return d
+    })
 
     let tag = 'input'
 
@@ -155,7 +167,7 @@ function componentField(d) {
         case 'color':
             return getLabel(d.label, labelAttrs) + getInput(tag, inputAttrs, d.type, d.default, true)
             
-        case 'button':
+        case 'button': 
             return `<button ${inputAttrs.join(' ')}>${d.label}</button>`
 
         case 'range':

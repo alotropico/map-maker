@@ -8,12 +8,11 @@ let geoData = {}
 
 async function init() {
 
-	const coso = await fetcher('../../data/ignore/new/ne_10m_admin_0_label_points.geojson')
+	const points = await fetcher('../../data/ignore/new/ne_10m_admin_0_label_points.geojson')
 
 	const collect = {}
 
-	coso.features = coso.features.filter((m, i) => {
-		
+	points.features = points.features.filter((m) => {
 
 		const id = m.properties.sr_subunit
 
@@ -39,7 +38,7 @@ async function init() {
 		return cosi
 	})
 
-	//console.log(coso)
+	//console.log(points)
 
 	// get geo data
 	const 	world = await fetcher('../../data/world-atlas-110m.json'),
@@ -49,7 +48,7 @@ async function init() {
 			cities = await fetcher('../../data/ne_110m_populated_places_simple.json'),
 			languagefamilies =  await fetcher('../../data/world-2.json')
 
-	geoData = parseGeoData({world, countries, countrieshq, tinycountries, cities, languagefamilies, coso})
+	geoData = parseGeoData({world, countries, countrieshq, tinycountries, cities, languagefamilies, points})
 
 	// setup tools with default values
 	setupForm(tools, update, '.tools')

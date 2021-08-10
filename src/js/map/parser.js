@@ -1,4 +1,4 @@
-import * as d3 from 'd3'
+// import * as d3 from 'd3'
 import * as topojson from 'topojson'
 
 import {layers, baseStyle} from './config.js'
@@ -82,33 +82,6 @@ function parseLabels(geoData, options) {
 function getBiggestShape(data) {
     //console.log(data)
     return data
-}
-
-function getCentroid(e) {
-
-    if(e.type == 'Polygon') return [] // e.coordinates
-
-    const m = e.coordinates.sort((a, b) => a[0].length > b[0].length ? -1 : a[0].length < b[0].length ? 1 : 0) // Sort shapes and get the one with most points
-                .map(o => {
-
-                    if(!Array.isArray(o) || !Array.isArray(o[0])) return o
-
-                    const ret = o.sort((a, b) => a[0].length > b[0].length ? -1 : a[0].length < b[0].length ? 1 : 0)
-
-                    if(ret?.[0]?.[0]) return [ret[0]]
-
-                    return o
-                })
-    if(m?.[0]?.[0]) {
-        
-            return [[m[0][0]]]
-    }
-
-    console.log(e)
-    
-    if(m?.[0]) return [m[0]]
-
-    return m
 }
 
 export {parseFormResults, parseGeoData, parseLabels}

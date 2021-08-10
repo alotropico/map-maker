@@ -141,7 +141,8 @@ module.exports = (env, options) => {
       new CleanWebpackPlugin(),
       new CopyPlugin({
         patterns: [
-          { from: 'data', to: 'data' }
+          { from: 'data', to: 'data' },
+          { from: 'images', to: 'images' }
         ]
       }),
       new webpack.ProvidePlugin({
@@ -154,7 +155,7 @@ module.exports = (env, options) => {
         filename: 'index.html',
         inject: true,
         chunks: ['index'],
-        // templateParameters: _gParams,
+        templateParameters: _gParams,
         minify: false
         /*{
           sortAttributes: true,

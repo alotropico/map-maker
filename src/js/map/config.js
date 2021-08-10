@@ -1,3 +1,5 @@
+import {exportSvg, exportPng} from './actions'
+
 const layers = [
     {
         id: 'mask',
@@ -394,12 +396,18 @@ const panels = [
             {
                 label: 'Save as PNG',
                 id: 'save_png',
-                type: 'button'
+                type: 'button',
+                actions: {
+                    onclick: exportPng
+                }
             },
             {
                 label: 'Save as SVG',
                 id: 'save_svg',
-                type: 'button'
+                type: 'button',
+                actions: {
+                    onclick: exportSvg
+                }
             }
         ]
     }

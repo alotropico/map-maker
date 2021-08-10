@@ -1,13 +1,30 @@
-import "core-js/stable"
-import "regenerator-runtime/runtime"
+import 'core-js/stable'
+import 'regenerator-runtime/runtime'
 import '../sass/main.scss'
 import init from './app'
 
 init()
 
 /*
+	Custom map maker
+	World map editor
+	Map creator
+	Generate map
 
-	-- JUNIO
+	Custom world map
+	Map chart
+	Country map generator
+
+	Color map online
+	Map maker online
+
+
+	https://www.worldmapgenerator.com/
+	http://worldmapcreator.com/
+	http://www.worldmapmaker.com/
+	https://paintmaps.com/map-charts/world-map-chart
+
+	-- 
 
 	* Finish styles
 
@@ -17,7 +34,7 @@ init()
 
 	* Change text labels according to available space
 
-	Displace labels by voronoi
+	Move centroids logic to parser
 
 	Save as SVG
 
@@ -25,10 +42,14 @@ init()
 
 	Cleaner/more accurate map data
 
+	Sea/oceans data (labels)
+
 	Night mode
 
+	Displace labels by voronoi
 
-	-- JULIO
+
+	-- 
 
 	Load data colors
 
@@ -37,7 +58,7 @@ init()
 	Legend box movable
 
 
-	-- AGOSTO
+	-- 
 
 	Share
 
@@ -46,7 +67,7 @@ init()
 	Save PNG, Config
 
 
-	-- SETIEMBRE
+	-- 
 
 	Zoom on a country
 
@@ -55,7 +76,7 @@ init()
 	Projections legends
 
 
-	-- OCTUBRE
+	-- 
 
 	Gallery of examples
 		Official languages
@@ -65,34 +86,34 @@ init()
 		Physical map
 
 
-	-- NOVIEMBRE
+	-- 
 
 	REACT + SCSS + PUG
 
 
-	-- DICIEMBRE
+	-- 
 
 	Transitions
 
 
-	-- ENERO
+	-- 
 
 	Public gallery
 
 	Directory
 
 
-	-- FEBRERO
+	-- 
 
 	Portal
 
 
-	-- MARZO
+	-- 
 
 	Pangea
 
 
-	-- ABRIL...
+	-- 
 
 	Add timelines
 	
