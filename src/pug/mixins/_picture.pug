@@ -1,0 +1,4 @@
+mixin picture(mobile, desktop, alt, skin)
+    picture
+        source(srcset=desktop, media='(min-width:580px)')
+        img(src=mobile, class=skin, alt=alt)

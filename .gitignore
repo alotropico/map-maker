@@ -1,0 +1,7 @@
+# node packages
+node_modules
+dist
+ignore
+
+# vscode setting
+.vscode
