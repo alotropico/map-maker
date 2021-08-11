@@ -3,7 +3,7 @@
 :root {
   --font-size: 16px;
 
-  --primary: #6da9ce;
+  --primary: #0075FF; // #6da9ce;
   --text: #3e4850;
   --penumbra: #5e707e;
   --background: #fefefe;
@@ -11,6 +11,9 @@
   --shadow-1: #e3e9ec;
 
   --shadow-intensity: 0.05;
+
+  --font-family: 'Open Sans', sans-serif, Helvetica, Arial, sans-serif;
+  --font-titles: 'Kufam', sans-serif;
 }
 
 @mixin dark-mode {
@@ -46,8 +49,8 @@ $gap: 1rem;
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Kufam:wght@300;400;700&display=swap');
 
-$font-family: 'Open Sans', sans-serif;
-$font-titles: 'Kufam', sans-serif;
+$font-family: var(--font-family);
+$font-titles: var(--font-titles);
 
 $font-size: var(--font-size);
 

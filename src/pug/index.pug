@@ -11,18 +11,27 @@ html(lang="en")
 		meta(rel="canonical", href="https://geomapmaker.com")
 
 		meta(property='og:type' content='website')
-		meta(property='og:title' content='Geo World Map Maker')
-		meta(property='og:description' content='Generate a PNG or SVG Map in seconds, with 87 projections to choose from and custom options.')
+		meta(property='og:title' content='Geo Map Maker. Generate a PNG or SVG World Map in seconds')
+		meta(property='og:description' content='87 projections to choose from, various datasets and custom options.')
 		meta(property='og:image' content='/images/geo-map-maker.png')
 		meta(property='og:url' content='https://geomapmaker.com')
 		meta(property='og:site_name' content='GEO Map Maker')
+
+		meta(name='twitter:card' content='summary')
+		meta(name='twitter:site' content='@gazeoftime')
+		meta(name='twitter:title' content='Geo Map Maker')
+		meta(name='twitter:description' content='Generate a PNG or SVG World Map in seconds. 87 projections to choose from, various datasets and custom options.')
+		meta(name='twitter:image' content='https://geomapmaker.com/images/tw-img.png')
+
 		link(rel='icon' type='image/png' href='/images/favicon.png')
+
+		include ./analytics.html
 
 	body.dark-mode-off
 		#app.app
 			aside.tools-wrapper
 				form#tools.tools.vertical
-					h1 GEO Map Maker
+					h1 GEO Map Maker <em>beta</em>
 					
 			.canvas
 				main.map

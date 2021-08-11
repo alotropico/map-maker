@@ -1,9 +1,13 @@
+:root {
+    
+}
+
 * {
     box-sizing: border-box;
 }
 
 html, body {
-    font-family: $font-family, Helvetica, Arial, sans-serif;
+    font-family: $font-family;
     font-size: $font-size;
     color: $text;
     margin: 0;
@@ -22,9 +26,26 @@ h1, h2, h3, h4, h5, h6 {
 h1 {
     font-size: 28px;
     letter-spacing: 0.06em;
+    position: relative;
     margin: 0 $gap;
     padding: $gap*1.5 0 $gap/2;
-    border-bottom: 1px solid $shadow-1;
+    //border-bottom: 1px solid $shadow-1;
+
+    em {
+        font-family: $font-family;
+        font-size: 11px;
+        font-style: normal;
+        font-weight: 600;
+        color: white;
+        letter-spacing: 0;
+        line-height: 1;
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        padding: 0 .5em .2em;
+        background: var(--primary);
+        border-radius: 2em;
+    }
 }
 
 input, select, textarea {
